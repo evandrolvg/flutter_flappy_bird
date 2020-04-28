@@ -22,11 +22,14 @@ import 'config/store.dart';
 import 'game_state.dart';
 
 class GameController extends BaseGame {
+  //Altura do chao
   static final double groundHeight = 130;
 
   GameState gameState = GameState.initializing;
+  //Hive
   Box userBox;
   Size screenSize;
+
   double width;
   double height;
   double centerX;
@@ -34,9 +37,11 @@ class GameController extends BaseGame {
 
   Background _bg = Background();
   Base _base = Base();
+  //Obstáculos
   final int _pipeIntervalInMs = 1800;
   int _pipeCount;
   List<Pipe> _pipes = [];
+  //Coleção de objetos em que cada objeto pode ocorrer apenas uma vez
   Set<int> _passedPipeIds = new Set();
   double _lastPipeInterval;
   Timer pipeFactoryTimer;
@@ -54,7 +59,7 @@ class GameController extends BaseGame {
 
   @override
   bool debugMode() {
-    return false;
+    return true;
   }
 
   GameController() {
@@ -75,6 +80,7 @@ class GameController extends BaseGame {
   }
 
   Future<Box> _initializeUserBox() async {
+    print('GameController - initializeUserBox - Hive');
     return Hive.openBox(Store.userBox);
   }
 
@@ -83,6 +89,7 @@ class GameController extends BaseGame {
 
   @override
   void resize(Size s) {
+    print('GameController - resize');
     super.resize(s);
     if (GameState.initializing == gameState) {
       screenSize = s;
@@ -95,6 +102,7 @@ class GameController extends BaseGame {
   }
 
   void _initializeGame() {
+    print('GameController - initializeGame');
     _initializeBgm();
     _initializeBird();
     _initializePipes();
@@ -104,24 +112,28 @@ class GameController extends BaseGame {
   }
 
   void _initializePlayButton() {
+    print('GameController - initializePlayButton');
     _playButton?.remove();
     _playButton = PlayButton(() => _gotoPlayGame());
     add(_playButton);
   }
 
   void _initializeRetryButton() {
+    print('GameController - initializeRetryButton');
     _destroyRetryButton();
     _retryButton = RetryButton(() => _gotoStartGame());
     add(_retryButton);
   }
 
   void _initializeBird() {
+    print('GameController - initializeBird');
     _bird?.remove();
     _bird = Bird(this);
     add(_bird);
   }
 
   void _initializePipes() {
+    print('GameController - initializePipes');
     _pipes.forEach((p) => p.destroy());
     _pipes = [];
     _pipeCount = 0;
@@ -130,6 +142,7 @@ class GameController extends BaseGame {
   }
 
   void _initializeBgm() {
+    print('GameController - initializeBgm');
     if (Flame.bgm.isPlaying) {
       Flame.bgm.stop();
     }
@@ -150,6 +163,7 @@ class GameController extends BaseGame {
   }
 
   void _updateScore() {
+    print('GameController - updateScore');
     _pipes
         .where((p) => p.isPassed(_bird))
         .forEach((p) => _passedPipeIds.add(p.pipeId));
@@ -157,6 +171,7 @@ class GameController extends BaseGame {
   }
 
   bool _isCrashing() {
+    print('GameController - isCrashing');
     if (_bird.isDead || _hasCrashed) return false;
     if (_bird.y < 0 || _bird.y > (height - _bird.height / 2)) {
       return true;
@@ -171,6 +186,7 @@ class GameController extends BaseGame {
   }
 
   void _updatePipes(double t) {
+    print('GameController - updatePipes');
     if (_lastPipeInterval > _pipeIntervalInMs) {
       Pipe pipe = Pipe(_pipeCount++, this, width);
       add(pipe.pipeTop);
@@ -200,6 +216,7 @@ class GameController extends BaseGame {
   }
 
   void _gotoStartGame() {
+    print('gotoStartGame');
     _startGame.setVisible(true);
     _gameOver.hide();
     _hideScores();
@@ -220,6 +237,7 @@ class GameController extends BaseGame {
   }
 
   void _gotoPlayGame() {
+    print('GameController - gotoPlayGame');
     gameState = GameState.playing;
     _startGame.setVisible(false);
     _playButton.remove();
@@ -228,6 +246,7 @@ class GameController extends BaseGame {
   }
 
   void _gotoGameOver() {
+    print('GameController - gotoGameOver');
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
     _bird.die();
@@ -240,6 +259,7 @@ class GameController extends BaseGame {
   }
 
   void _updateTopScore() {
+    print('GameController - updateTopScore');
     _getLastTopScore().then((lastTopScore) {
       if (_score.score > lastTopScore) {
         _topScore = _score.score;
@@ -251,6 +271,7 @@ class GameController extends BaseGame {
   }
 
   void _showScoreBoard() {
+    print('GameController - showScoreBoard');
     finalScoreText = FinalScore(_score.score);
     topScoreText = TopScore(_topScore);
     add(finalScoreText);

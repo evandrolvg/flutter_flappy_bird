@@ -8,7 +8,7 @@ class GameOver extends TextComponent {
   bool _isVisible = false;
   double _toY;
 
-  GameOver() : super('Game Over', config: GameText.large);
+  GameOver() : super('Já era', config: GameText.large);
 
   @override
   void resize(Size s) {

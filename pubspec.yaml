@@ -49,14 +49,19 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
+    - assets/images/logo.png
     - assets/images/base.png
     - assets/images/bg.png
     - assets/images/bird0.png
     - assets/images/bird1.png
     - assets/images/bird2.png
+    - assets/images/bird3.png
+    - assets/images/bird4.png
+    - assets/images/bird5.png
     - assets/images/pipe-top.png
     - assets/images/pipe-bottom.png
     - assets/images/play-btn.png
+    - assets/images/grass.png
     - assets/audio/bgm.mp3
     - assets/audio/jump.mp3
     - assets/audio/die.mp3

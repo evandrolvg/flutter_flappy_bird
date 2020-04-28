@@ -1,19 +1,18 @@
 import 'dart:ui';
 
-import 'package:flame/components/text_component.dart';
+import 'package:flame/components/component.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutterflappybird/config/game_text.dart';
-
-class StartGame extends TextComponent {
+class StartGame extends SpriteComponent {
   bool isVisible = true;
 
-  StartGame() : super('Flappy Bird', config: GameText.large);
+  StartGame() : super.fromSprite(200, 230, Sprite("logo.png"));
 
   @override
   void resize(Size s) {
     x = s.width / 2 - width/2;
-    y = s.height / 2 - 250;
+    y = s.height / 2 - 310;
   }
 
   @override

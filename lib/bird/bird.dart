@@ -14,7 +14,7 @@ import '../game_state.dart';
 
 class Bird extends AnimationComponent {
   static final List<Sprite> sprites =
-      [0, 1, 2, 1].map((i) => Sprite('bird$i.png')).toList();
+      [0, 1, 2, 3, 4, 5, 4, 3, 2, 1].map((i) => Sprite('bird$i.png')).toList();
   final GameController _game;
   bool isDead = false;
   double radius;
@@ -32,7 +32,7 @@ class Bird extends AnimationComponent {
   Paint paint = Paint();
 
   Bird(this._game)
-      : super(51, 36, fa.Animation.spriteList(sprites, stepTime: 0.08)) {
+      : super(91, 76, fa.Animation.spriteList(sprites, stepTime: 0.08)) {
     anchor = Anchor.center;
     paint.color = debugColor;
     paint.style = PaintingStyle.stroke;
