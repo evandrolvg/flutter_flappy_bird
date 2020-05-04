@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -57,6 +58,8 @@ class GameController extends BaseGame {
   RetryButton _retryButton;
   bool _hasCrashed;
 
+
+
   @override
   bool debugMode() {
     return true;
@@ -66,7 +69,7 @@ class GameController extends BaseGame {
     _initializeUserBox().then((b) => userBox = b);
     Flame.audio.loadAll([
       Sound.bgm,
-      Sound.jump,
+      //Sound.jump,
       Sound.die,
       Sound.crash,
       Sound.score,
@@ -77,6 +80,9 @@ class GameController extends BaseGame {
     add(_startGame);
     add(_gameOver);
     _getLastTopScore().then((s) => _topScore = s);
+
+    Flame.bgm.stop();
+
   }
 
   Future<Box> _initializeUserBox() async {
@@ -143,9 +149,9 @@ class GameController extends BaseGame {
 
   void _initializeBgm() {
     print('GameController - initializeBgm');
-    if (Flame.bgm.isPlaying) {
-      Flame.bgm.stop();
-    }
+    Flame.bgm.stop();
+    //if (Flame.bgm.isPlaying) {
+    //}
     Flame.bgm.play(Sound.bgm, volume: 0.4);
   }
 

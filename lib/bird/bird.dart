@@ -29,10 +29,13 @@ class Bird extends AnimationComponent {
   double _maxDropSpeed = 17.5;
   double _dropAcceleration = 0.55;
 
+  Random rnd;
+
   Paint paint = Paint();
 
   Bird(this._game)
       : super(91, 76, fa.Animation.spriteList(sprites, stepTime: 0.08)) {
+    rnd = Random();
     anchor = Anchor.center;
     paint.color = debugColor;
     paint.style = PaintingStyle.stroke;
@@ -100,8 +103,14 @@ class Bird extends AnimationComponent {
 
   void jump() {
     if (!isDead) {
-      Flame.audio.play(Sound.jump, volume: 0.4);
+      //int randInt = rnd.nextInt(8);
+      //print('randInt $randInt');
+
+      //Flame.audio.play(Sound.jump, volume: 0.4);
+      Flame.audio.play('sound' + (rnd.nextInt(7) + 1).toString() + '.mp3');
+      Flame.audio.disableLog();
       _timeCount = _initialJumpSpeed;
+
     }
   }
 

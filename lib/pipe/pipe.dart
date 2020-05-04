@@ -7,7 +7,7 @@ import 'package:flutterflappybird/pipe/pipe_top.dart';
 
 class Pipe {
   static final double speed = 3;
-  static final double pipeWidth = 70;
+  static final double pipeWidth = 40;
   static final double pipeHeight = 500;
 
   final int pipeId;
@@ -19,10 +19,10 @@ class Pipe {
   double _gapHeight;
   double _gapTopY;
 
-  final int gapMinHeight = 165;
-  final int gapMaxHeight = 165;
-  final int gapMinTopY = 90;
-  final int gapMaxTopY = 450;
+  final int gapMinHeight = 300;
+  final int gapMaxHeight = 500;
+  final int gapMinTopY = 40;
+  final int gapMaxTopY = 350;
   double x;
   bool isOutOfSight = false;
 
