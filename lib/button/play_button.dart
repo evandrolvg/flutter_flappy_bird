@@ -10,12 +10,12 @@ class PlayButton extends SpriteComponent with Tapable {
   Function tapCallback;
 
   PlayButton(this.tapCallback)
-      : super.fromSprite(60, 60, Sprite("play-btn.png"));
+      : super.fromSprite(170, 70, Sprite("play-btn.png"));
 
   @override
   void resize(Size s) {
     x = s.width / 2 - width / 2;
-    y = s.height * 5 / 9;
+    y = s.height * 5 / 7;
   }
 
   @override

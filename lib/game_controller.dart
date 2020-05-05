@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutterflappybird/background/background.dart';
@@ -24,7 +22,7 @@ import 'game_state.dart';
 
 class GameController extends BaseGame {
   //Altura do chao
-  static final double groundHeight = 130;
+  static final double groundHeight = 80;
 
   GameState gameState = GameState.initializing;
   //Hive
@@ -58,11 +56,9 @@ class GameController extends BaseGame {
   RetryButton _retryButton;
   bool _hasCrashed;
 
-
-
   @override
   bool debugMode() {
-    return true;
+    return false;
   }
 
   GameController() {
