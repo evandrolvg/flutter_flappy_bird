@@ -34,7 +34,7 @@ class Bird extends AnimationComponent {
   Paint paint = Paint();
 
   Bird(this._game)
-      : super(91, 76, fa.Animation.spriteList(sprites, stepTime: 0.08)) {
+      : super(91, 76, fa.Animation.spriteList(sprites, stepTime: 0.05)) {
     rnd = Random();
     anchor = Anchor.center;
     paint.color = debugColor;

@@ -13,7 +13,7 @@ class RetryButton extends SpriteComponent with Tapable {
   bool _isVisible = false;
 
   RetryButton(this.tapCallback)
-      : super.fromSprite(120, 60, Sprite("play-btn.png")) {
+      : super.fromSprite(160, 60, Sprite("play-btn.png")) {
     _countdown.start();
   }
 

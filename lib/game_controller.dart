@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flutterflappybird/background/background.dart';
 import 'package:flutterflappybird/background/base.dart';
 import 'package:flutterflappybird/bird/bird.dart';
+import 'package:flutterflappybird/button/low_over_button.dart';
 import 'package:flutterflappybird/collision_detector.dart';
 import 'package:flutterflappybird/config/sound.dart';
 import 'package:flutterflappybird/pipe/pipe.dart';
@@ -52,6 +53,7 @@ class GameController extends BaseGame {
 
   StartGame _startGame = StartGame();
   PlayButton _playButton;
+  LowOverButton _lowOverButton;
   GameOver _gameOver = GameOver();
   RetryButton _retryButton;
   bool _hasCrashed;
@@ -70,11 +72,13 @@ class GameController extends BaseGame {
       Sound.crash,
       Sound.score,
     ]);
+    Flame.audio.disableLog();
     add(_bg);
     add(_base);
     add(_score);
     add(_startGame);
     add(_gameOver);
+
     _getLastTopScore().then((s) => _topScore = s);
 
     Flame.bgm.stop();
@@ -82,7 +86,7 @@ class GameController extends BaseGame {
   }
 
   Future<Box> _initializeUserBox() async {
-    print('GameController - initializeUserBox - Hive');
+    //print('GameController - initializeUserBox - Hive');
     return Hive.openBox(Store.userBox);
   }
 
@@ -91,7 +95,7 @@ class GameController extends BaseGame {
 
   @override
   void resize(Size s) {
-    print('GameController - resize');
+    //print('GameController - resize');
     super.resize(s);
     if (GameState.initializing == gameState) {
       screenSize = s;
@@ -104,7 +108,7 @@ class GameController extends BaseGame {
   }
 
   void _initializeGame() {
-    print('GameController - initializeGame');
+    //print('GameController - initializeGame');
     _initializeBgm();
     _initializeBird();
     _initializePipes();
@@ -114,28 +118,33 @@ class GameController extends BaseGame {
   }
 
   void _initializePlayButton() {
-    print('GameController - initializePlayButton');
+    //print('GameController - initializePlayButton');
     _playButton?.remove();
     _playButton = PlayButton(() => _gotoPlayGame());
     add(_playButton);
   }
 
   void _initializeRetryButton() {
-    print('GameController - initializeRetryButton');
+    //print('GameController - initializeRetryButton');
     _destroyRetryButton();
     _retryButton = RetryButton(() => _gotoStartGame());
     add(_retryButton);
   }
 
+  void _initializeLowOverButton() {
+    _lowOverButton = LowOverButton(this);
+    add(_lowOverButton);
+  }
+
   void _initializeBird() {
-    print('GameController - initializeBird');
+    //print('GameController - initializeBird');
     _bird?.remove();
     _bird = Bird(this);
     add(_bird);
   }
 
   void _initializePipes() {
-    print('GameController - initializePipes');
+    //print('GameController - initializePipes');
     _pipes.forEach((p) => p.destroy());
     _pipes = [];
     _pipeCount = 0;
@@ -144,10 +153,11 @@ class GameController extends BaseGame {
   }
 
   void _initializeBgm() {
-    print('GameController - initializeBgm');
-    Flame.bgm.stop();
-    //if (Flame.bgm.isPlaying) {
-    //}
+    //print('GameController - initializeBgm');
+
+    if (Flame.bgm.isPlaying) {
+      Flame.bgm.stop();
+    }
     Flame.bgm.play(Sound.bgm, volume: 0.4);
   }
 
@@ -165,7 +175,7 @@ class GameController extends BaseGame {
   }
 
   void _updateScore() {
-    print('GameController - updateScore');
+    //print('GameController - updateScore');
     _pipes
         .where((p) => p.isPassed(_bird))
         .forEach((p) => _passedPipeIds.add(p.pipeId));
@@ -173,7 +183,7 @@ class GameController extends BaseGame {
   }
 
   bool _isCrashing() {
-    print('GameController - isCrashing');
+    //print('GameController - isCrashing');
     if (_bird.isDead || _hasCrashed) return false;
     if (_bird.y < 0 || _bird.y > (height - _bird.height / 2)) {
       return true;
@@ -188,7 +198,7 @@ class GameController extends BaseGame {
   }
 
   void _updatePipes(double t) {
-    print('GameController - updatePipes');
+    //print('GameController - updatePipes');
     if (_lastPipeInterval > _pipeIntervalInMs) {
       Pipe pipe = Pipe(_pipeCount++, this, width);
       add(pipe.pipeTop);
@@ -218,11 +228,12 @@ class GameController extends BaseGame {
   }
 
   void _gotoStartGame() {
-    print('gotoStartGame');
+    //print('gotoStartGame');
     _startGame.setVisible(true);
     _gameOver.hide();
     _hideScores();
     _destroyRetryButton();
+    _initializeLowOverButton();
     _initializePlayButton();
     _initializeGame();
     gameState = GameState.start;
@@ -239,16 +250,17 @@ class GameController extends BaseGame {
   }
 
   void _gotoPlayGame() {
-    print('GameController - gotoPlayGame');
+    //print('GameController - gotoPlayGame');
     gameState = GameState.playing;
     _startGame.setVisible(false);
     _playButton.remove();
+    _lowOverButton.setVisible(true);
     _score.setVisible(true);
     _bird.jump();
   }
 
   void _gotoGameOver() {
-    print('GameController - gotoGameOver');
+    //print('GameController - gotoGameOver');
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
     _bird.die();
@@ -257,11 +269,12 @@ class GameController extends BaseGame {
     _hasCrashed = true;
     _gameOver.show();
     _initializeRetryButton();
+    _lowOverButton.setVisible(false);
     gameState = GameState.finished;
   }
 
   void _updateTopScore() {
-    print('GameController - updateTopScore');
+    //print('GameController - updateTopScore');
     _getLastTopScore().then((lastTopScore) {
       if (_score.score > lastTopScore) {
         _topScore = _score.score;
@@ -273,10 +286,15 @@ class GameController extends BaseGame {
   }
 
   void _showScoreBoard() {
-    print('GameController - showScoreBoard');
+    //print('GameController - showScoreBoard');
     finalScoreText = FinalScore(_score.score);
     topScoreText = TopScore(_topScore);
     add(finalScoreText);
     add(topScoreText);
   }
+
+  void lowOver(){
+    _bird.die();
+  }
+
 }

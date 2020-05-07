@@ -62,6 +62,7 @@ flutter:
     - assets/images/pipe-bottom.png
     - assets/images/play-btn.png
     - assets/images/grass.png
+    - assets/images/rasante-btn.png
     - assets/audio/bgm.mp3
     - assets/audio/jump.mp3
     - assets/audio/die.mp3
