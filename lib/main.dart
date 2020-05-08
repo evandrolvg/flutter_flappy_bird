@@ -20,6 +20,6 @@ void main() async {
   GameController game = GameController();
   runApp(game.widget);
   //Classe - música de fundo em loop
-  Flame.bgm.initialize();
+  //Flame.bgm.initialize();
   Flame.audio.disableLog();
 }

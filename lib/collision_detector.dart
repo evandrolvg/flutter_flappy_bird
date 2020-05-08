@@ -20,7 +20,7 @@ class CollisionDetector {
     final distX = (c.x - r.x - r.width / 2).abs();
     final distY = (c.y - r.y - r.height / 2).abs();
     if(lowOver){
-      print('LOWOVER');
+      //print('LOWOVER');
       return false;
     }
     // If the distance is greater than halfCircle + halfRect, then they are too far apart to be colliding

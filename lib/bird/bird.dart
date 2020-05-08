@@ -120,7 +120,7 @@ class Bird extends AnimationComponent {
     if (!isDead) {
       //int randInt = rnd.nextInt(8);
       //print('randInt $randInt');
-
+      //Flame.audio.clear(Sound.attack);
       //Flame.audio.play(Sound.jump, volume: 0.4);
       Flame.audio.play('sound' + (rnd.nextInt(7) + 1).toString() + '.mp3');
       Flame.audio.disableLog();
@@ -135,7 +135,7 @@ class Bird extends AnimationComponent {
   }
 
   void low() {
-    Flame.audio.play(Sound.die, volume: 0.5);
+    Flame.audio.play(Sound.attack, volume: 1.0);
     lowOver = true;
   }
 

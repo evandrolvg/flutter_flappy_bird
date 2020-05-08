@@ -66,7 +66,7 @@ class GameController extends BaseGame {
   GameController() {
     _initializeUserBox().then((b) => userBox = b);
     Flame.audio.loadAll([
-      Sound.bgm,
+      //Sound.bgm,
       //Sound.jump,
       Sound.die,
       Sound.crash,
@@ -81,7 +81,7 @@ class GameController extends BaseGame {
 
     _getLastTopScore().then((s) => _topScore = s);
 
-    Flame.bgm.stop();
+    //Flame.bgm.stop();
 
   }
 
@@ -109,7 +109,7 @@ class GameController extends BaseGame {
 
   void _initializeGame() {
     //print('GameController - initializeGame');
-    _initializeBgm();
+    //_initializeBgm();
     _initializeBird();
     _initializePipes();
     _initializePlayButton();
@@ -152,14 +152,14 @@ class GameController extends BaseGame {
     _lastPipeInterval = 1400;
   }
 
-  void _initializeBgm() {
+  /*void _initializeBgm() {
     //print('GameController - initializeBgm');
 
     if (Flame.bgm.isPlaying) {
       Flame.bgm.stop();
     }
     Flame.bgm.play(Sound.bgm, volume: 0.4);
-  }
+  }*/
 
   @override
   void update(double t) {
@@ -262,11 +262,11 @@ class GameController extends BaseGame {
   }
 
   void _gotoGameOver() {
-    //print('GameController - gotoGameOver');
+    print('GameController - gotoGameOver');
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
     _bird.die();
-    Flame.bgm.stop();
+    //Flame.bgm.stop();
     _updateTopScore();
     _hasCrashed = true;
     _gameOver.show();
