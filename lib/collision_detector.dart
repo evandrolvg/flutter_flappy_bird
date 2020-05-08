@@ -11,13 +11,18 @@ class CollisionDetector {
     Rectangle rectTop = Rectangle(t.x, t.y, t.width, t.height);
     PipeBottom b = p.pipeBottom;
     Rectangle rectBottom = Rectangle(b.x, b.y, b.width, b.height);
-    return _hasCollided(c, rectTop) || _hasCollided(c, rectBottom);
+
+    return _hasCollided(c, rectTop, bird.lowOver) || _hasCollided(c, rectBottom, bird.lowOver);
   }
 
-  static bool _hasCollided(Circle c, Rectangle r) {
+  static bool _hasCollided(Circle c, Rectangle r, bool lowOver) {
     // Find the vertical & horizontal (distX/distY) distances between the circle’s center and the rectangle’s center
     final distX = (c.x - r.x - r.width / 2).abs();
     final distY = (c.y - r.y - r.height / 2).abs();
+    if(lowOver){
+      print('LOWOVER');
+      return false;
+    }
     // If the distance is greater than halfCircle + halfRect, then they are too far apart to be colliding
     if (distX > (r.width / 2 + c.radius) || distY > (r.height / 2 + c.radius)) {
       return false;

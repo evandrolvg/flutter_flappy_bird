@@ -219,7 +219,9 @@ class GameController extends BaseGame {
     switch (gameState) {
       case GameState.playing:
         {
+          _bird.lowOver = false;
           _bird.jump();
+
         }
         break;
       default:
@@ -294,7 +296,7 @@ class GameController extends BaseGame {
   }
 
   void lowOver(){
-    _bird.die();
+    _bird.low();
   }
 
 }

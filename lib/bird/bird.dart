@@ -17,6 +17,7 @@ class Bird extends AnimationComponent {
       [0, 1, 2, 3, 4, 5, 4, 3, 2, 1].map((i) => Sprite('bird$i.png')).toList();
   final GameController _game;
   bool isDead = false;
+  bool lowOver = false;
   double radius;
 
   double _velocity = -2.3;
@@ -63,6 +64,7 @@ class Bird extends AnimationComponent {
       _timeCount =
           _timeCount < _initialDropSpeed ? _initialDropSpeed : _timeCount;
     }
+
     _calculateDisplacement();
     _limitDropAcceleration();
     _applyDisplacement();
@@ -82,8 +84,21 @@ class Bird extends AnimationComponent {
   }
 
   void _calculateDisplacement() {
-    _displacement = (_velocity * _timeCount) +
-        (0.5 * _gravityAcceleration * pow(_timeCount, 2));
+    if(lowOver){
+      double _gravityAccelerationLow = 0.25;
+      _displacement = (_velocity * _timeCount) + (0.5 * _gravityAccelerationLow * pow(_timeCount, 2));
+
+    }else{
+      _displacement = (_velocity * _timeCount) + (0.5 * _gravityAcceleration * pow(_timeCount, 2));
+    }
+
+
+
+    /*print('_displacement $_displacement');
+    print('_velocity $_velocity');
+    print('_timeCount $_timeCount');
+    print('_gravityAcceleration $_gravityAcceleration');
+*/
   }
 
   void _spin() {
@@ -117,6 +132,11 @@ class Bird extends AnimationComponent {
   void die() {
     Flame.audio.play(Sound.die, volume: 0.5);
     isDead = true;
+  }
+
+  void low() {
+    Flame.audio.play(Sound.die, volume: 0.5);
+    lowOver = true;
   }
 
   @override
