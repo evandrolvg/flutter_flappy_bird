@@ -118,10 +118,9 @@ class Bird extends AnimationComponent {
 
   void jump() {
     if (!isDead) {
-      //int randInt = rnd.nextInt(8);
-      //print('randInt $randInt');
-      //Flame.audio.clear(Sound.attack);
-      //Flame.audio.play(Sound.jump, volume: 0.4);
+      Flame.bgm.dispose();
+      Flame.bgm.stop();
+
       Flame.audio.play('sound' + (rnd.nextInt(7) + 1).toString() + '.mp3');
       Flame.audio.disableLog();
       _timeCount = _initialJumpSpeed;
@@ -130,13 +129,21 @@ class Bird extends AnimationComponent {
   }
 
   void die() {
+    lowOver = false;
     Flame.audio.play(Sound.die, volume: 0.5);
     isDead = true;
   }
 
   void low() {
-    Flame.audio.play(Sound.attack, volume: 1.0);
-    lowOver = true;
+    if (Flame.bgm.isPlaying) {
+      Flame.bgm.stop();
+    }
+
+    if (!isDead) {
+      Flame.audio.play(Sound.attack, volume: 0.4);
+      //Flame.bgm.play(Sound.bgm, volume: 0.4);
+      lowOver = true;
+    }
   }
 
   @override

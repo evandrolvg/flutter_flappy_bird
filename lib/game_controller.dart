@@ -66,7 +66,7 @@ class GameController extends BaseGame {
   GameController() {
     _initializeUserBox().then((b) => userBox = b);
     Flame.audio.loadAll([
-      //Sound.bgm,
+      Sound.bgm,
       //Sound.jump,
       Sound.die,
       Sound.crash,
@@ -81,7 +81,10 @@ class GameController extends BaseGame {
 
     _getLastTopScore().then((s) => _topScore = s);
 
-    //Flame.bgm.stop();
+    if (Flame.bgm.isPlaying) {
+      Flame.bgm.stop();
+    }
+    print('STOP BGM GAME CONTROLLER');
 
   }
 
@@ -219,6 +222,8 @@ class GameController extends BaseGame {
     switch (gameState) {
       case GameState.playing:
         {
+          Flame.bgm.stop();
+          //Flame.bgm.clearAll();
           _bird.lowOver = false;
           _bird.jump();
 
@@ -231,6 +236,7 @@ class GameController extends BaseGame {
 
   void _gotoStartGame() {
     //print('gotoStartGame');
+    Flame.bgm.stop();
     _startGame.setVisible(true);
     _gameOver.hide();
     _hideScores();
@@ -263,15 +269,15 @@ class GameController extends BaseGame {
 
   void _gotoGameOver() {
     print('GameController - gotoGameOver');
+    _lowOverButton.setVisible(false);
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
     _bird.die();
-    //Flame.bgm.stop();
+    Flame.bgm.stop();
     _updateTopScore();
     _hasCrashed = true;
     _gameOver.show();
     _initializeRetryButton();
-    _lowOverButton.setVisible(false);
     gameState = GameState.finished;
   }
 

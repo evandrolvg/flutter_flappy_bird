@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 class StartGame extends SpriteComponent {
   bool isVisible = true;
 
-  StartGame() : super.fromSprite(200, 230, Sprite("logo.png"));
+  StartGame() : super.fromSprite(220, 280, Sprite("logo.png"));
 
   @override
   void resize(Size s) {
     x = s.width / 2 - width/2;
-    y = s.height / 2 - 310;
+    y = s.height / 2 - s.height / 2;
   }
 
   @override
