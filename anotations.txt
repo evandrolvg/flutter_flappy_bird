@@ -1,2 +1,5 @@
 bird ->_calculateDisplacement - sobe no rasante
 collision_detector -> _hasCollided - não morre no rasante
+ //print('Angle ${this.angle}');
+
+ mod = _passedPipeIds.length % 1;

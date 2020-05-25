@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutterflappybird/background/background.dart';
 import 'package:flutterflappybird/background/base.dart';
 import 'package:flutterflappybird/bird/bird.dart';
@@ -34,6 +35,7 @@ class GameController extends BaseGame {
   double height;
   double centerX;
   double centerY;
+  int mod;
 
   Background _bg = Background();
   Base _base = Base();
@@ -181,6 +183,14 @@ class GameController extends BaseGame {
         .where((p) => p.isPassed(_bird))
         .forEach((p) => _passedPipeIds.add(p.pipeId));
     _score.updateScore(_passedPipeIds.length);
+    //print('PIPES ${_passedPipeIds.length}');
+
+    mod = _passedPipeIds.length % 1;
+
+    if (mod == 0 && _passedPipeIds.length > 1 && !_bird.lowOver) {
+      _lowOverButton.setVisible(true);
+    }
+
   }
 
   bool _isCrashing() {
@@ -224,7 +234,9 @@ class GameController extends BaseGame {
     switch (gameState) {
       case GameState.playing:
         {
+          Background();
           _bird.lowOver = false;
+          _bg.lowOver(_bird.lowOver);
           _bird.jump();
         }
         break;
@@ -260,7 +272,7 @@ class GameController extends BaseGame {
     gameState = GameState.playing;
     _startGame.setVisible(false);
     _playButton.remove();
-    _lowOverButton.setVisible(true);
+    //_lowOverButton.setVisible(true);
     _score.setVisible(true);
     _bird.jump();
   }
@@ -274,6 +286,7 @@ class GameController extends BaseGame {
     //Flame.bgm.stop();
     _updateTopScore();
     _hasCrashed = true;
+    _bg.lowOver(_bird.lowOver);
     _gameOver.show();
     _initializeRetryButton();
     gameState = GameState.finished;
@@ -300,7 +313,10 @@ class GameController extends BaseGame {
   }
 
   void lowOver(){
+    _lowOverButton.setVisible(false);
+
     _bird.low();
+    _bg.lowOver(_bird.lowOver);
   }
 
 }

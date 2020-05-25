@@ -20,6 +20,14 @@ class Background extends SpriteComponent {
     super.render(c);
   }
 
+  void lowOver(bool lowOver){
+    if (lowOver){
+      this.sprite = Sprite('bg_low.png');
+    }else{
+      this.sprite = Sprite('bg.png');
+    }
+  }
+
   @override
   int priority() => 20;
 }

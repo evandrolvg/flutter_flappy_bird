@@ -7,8 +7,8 @@ import 'package:flutterflappybird/pipe/pipe_top.dart';
 
 class Pipe {
   static double speed = 3;
-  static double pipeWidth = 40;
-  static double pipeHeight = 500;
+  static double pipeWidth = 60;
+  static double pipeHeight = 700;
 
   final int pipeId;
   final GameController _game;
