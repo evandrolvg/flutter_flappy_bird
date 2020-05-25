@@ -12,6 +12,7 @@ class PipeTop extends SpriteComponent {
       : super.fromSprite(
             Pipe.pipeWidth, Pipe.pipeHeight, Sprite('pipe-top.png')) {
     this.x = x;
+    //print('Angle ${this.angle}');
   }
 
   @override
@@ -20,7 +21,13 @@ class PipeTop extends SpriteComponent {
     super.resize(s);
   }
 
-  void move(double x) {
+  void move(double x, bool lowOver) {
+    if (lowOver) {
+      this.sprite = Sprite('pipe-top-explode.png');
+      this.angle = this.angle - 0.1;
+      this.width = this.width * 1.2 ;
+    }
+
     this.x = x;
   }
 

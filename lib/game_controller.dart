@@ -66,7 +66,7 @@ class GameController extends BaseGame {
   GameController() {
     _initializeUserBox().then((b) => userBox = b);
     Flame.audio.loadAll([
-      Sound.bgm,
+      //Sound.bgm,
       //Sound.jump,
       Sound.die,
       Sound.crash,
@@ -81,11 +81,9 @@ class GameController extends BaseGame {
 
     _getLastTopScore().then((s) => _topScore = s);
 
-    if (Flame.bgm.isPlaying) {
+    /*if (Flame.bgm.isPlaying) {
       Flame.bgm.stop();
-    }
-    print('STOP BGM GAME CONTROLLER');
-
+    }*/
   }
 
   Future<Box> _initializeUserBox() async {
@@ -194,7 +192,11 @@ class GameController extends BaseGame {
     final _comingPipes = _pipes.where((p) => !p.isPassed(_bird));
     for (Pipe p in _comingPipes) {
       if (CollisionDetector.hasBirdCollided(_bird, p)) {
-        return true;
+        if (_bird.lowOver){
+          p.move(_bird.lowOver);
+        }else{
+          return true;
+        }
       }
     }
     return false;
@@ -212,7 +214,7 @@ class GameController extends BaseGame {
       _lastPipeInterval += t * 1000;
     }
     _pipes.forEach((p) {
-      p.isOutOfSight ? p.destroy() : p.move();
+      p.isOutOfSight ? p.destroy() : p.move(false);
     });
     _pipes = _pipes.where((p) => !p.isOutOfSight).toList();
   }
@@ -222,11 +224,8 @@ class GameController extends BaseGame {
     switch (gameState) {
       case GameState.playing:
         {
-          Flame.bgm.stop();
-          //Flame.bgm.clearAll();
           _bird.lowOver = false;
           _bird.jump();
-
         }
         break;
       default:
@@ -236,7 +235,6 @@ class GameController extends BaseGame {
 
   void _gotoStartGame() {
     //print('gotoStartGame');
-    Flame.bgm.stop();
     _startGame.setVisible(true);
     _gameOver.hide();
     _hideScores();
@@ -268,12 +266,12 @@ class GameController extends BaseGame {
   }
 
   void _gotoGameOver() {
-    print('GameController - gotoGameOver');
+    //print('GameController - gotoGameOver');
     _lowOverButton.setVisible(false);
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
     _bird.die();
-    Flame.bgm.stop();
+    //Flame.bgm.stop();
     _updateTopScore();
     _hasCrashed = true;
     _gameOver.show();

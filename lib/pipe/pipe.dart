@@ -6,9 +6,9 @@ import 'package:flutterflappybird/pipe/pipe_bottom.dart';
 import 'package:flutterflappybird/pipe/pipe_top.dart';
 
 class Pipe {
-  static final double speed = 3;
-  static final double pipeWidth = 40;
-  static final double pipeHeight = 500;
+  static double speed = 3;
+  static double pipeWidth = 40;
+  static double pipeHeight = 500;
 
   final int pipeId;
   final GameController _game;
@@ -25,6 +25,8 @@ class Pipe {
   final int gapMaxTopY = 350;
   double x;
   bool isOutOfSight = false;
+
+  Bird _bird;
 
   Pipe(this.pipeId, this._game, startX) {
     x = startX;
@@ -49,20 +51,23 @@ class Pipe {
     return (min + Random().nextInt(max - min)).toDouble();
   }
 
-  void move() {
+  void move(bool lowOver) {
     if (x < -100) {
       isOutOfSight = true;
     } else {
       x -= speed;
-      pipeTop.move(x);
+      pipeTop.move(x, lowOver);
       pipeBottom.move(x);
     }
   }
 
-  bool isPassed(Bird bird) => (x + pipeWidth) < bird.x;
+  bool isPassed(Bird bird) {
+    return (x + pipeWidth) < bird.x;
+  }
 
   void destroy() {
     pipeTop.remove();
     pipeBottom.remove();
   }
+
 }

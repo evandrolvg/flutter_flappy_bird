@@ -84,10 +84,9 @@ class Bird extends AnimationComponent {
   }
 
   void _calculateDisplacement() {
-    if(lowOver){
+    if(lowOver){ //sobe
       double _gravityAccelerationLow = 0.25;
       _displacement = (_velocity * _timeCount) + (0.5 * _gravityAccelerationLow * pow(_timeCount, 2));
-
     }else{
       _displacement = (_velocity * _timeCount) + (0.5 * _gravityAcceleration * pow(_timeCount, 2));
     }
@@ -118,13 +117,9 @@ class Bird extends AnimationComponent {
 
   void jump() {
     if (!isDead) {
-      Flame.bgm.dispose();
-      Flame.bgm.stop();
-
       Flame.audio.play('sound' + (rnd.nextInt(7) + 1).toString() + '.mp3');
       Flame.audio.disableLog();
       _timeCount = _initialJumpSpeed;
-
     }
   }
 
@@ -135,10 +130,6 @@ class Bird extends AnimationComponent {
   }
 
   void low() {
-    if (Flame.bgm.isPlaying) {
-      Flame.bgm.stop();
-    }
-
     if (!isDead) {
       Flame.audio.play(Sound.attack, volume: 0.4);
       //Flame.bgm.play(Sound.bgm, volume: 0.4);

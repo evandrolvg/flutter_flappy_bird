@@ -1,0 +1,2 @@
+bird ->_calculateDisplacement - sobe no rasante
+collision_detector -> _hasCollided - não morre no rasante
