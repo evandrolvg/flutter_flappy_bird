@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'package:flame/components/parallax_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
+
 import 'package:flutterflappybird/background/background.dart';
 import 'package:flutterflappybird/background/base.dart';
 import 'package:flutterflappybird/bird/bird.dart';
@@ -38,7 +39,7 @@ class GameController extends BaseGame {
   int mod;
 
   Background _bg = Background();
-  Base _base = Base();
+  //Base _base = Base();
   //Obstáculos
   final int _pipeIntervalInMs = 1800;
   int _pipeCount;
@@ -60,6 +61,14 @@ class GameController extends BaseGame {
   RetryButton _retryButton;
   bool _hasCrashed;
 
+  static final images = [
+    ParallaxImage("cloud01.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
+    ParallaxImage("mountain.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
+    ParallaxImage("ground.png", repeat: ImageRepeat.repeatX, alignment: Alignment.bottomCenter, fill: LayerFill.height)  ];
+
+  final parallaxComponent = ParallaxComponent(images,
+      baseSpeed: const Offset(20, 0), layerDelta: const Offset(30, 0));
+
   @override
   bool debugMode() {
     return false;
@@ -75,11 +84,14 @@ class GameController extends BaseGame {
       Sound.score,
     ]);
     Flame.audio.disableLog();
-    add(_bg);
-    add(_base);
+    //add(_bg);
+    add(parallaxComponent);
+    //add(_base);
     add(_score);
     add(_startGame);
     add(_gameOver);
+
+
 
     _getLastTopScore().then((s) => _topScore = s);
 
@@ -234,7 +246,6 @@ class GameController extends BaseGame {
     switch (gameState) {
       case GameState.playing:
         {
-          Background();
           _bird.lowOver = false;
           _bg.lowOver(_bird.lowOver);
           _bird.jump();
