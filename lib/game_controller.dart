@@ -3,8 +3,6 @@ import 'package:flame/components/parallax_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
-import 'package:flutterflappybird/background/background.dart';
-import 'package:flutterflappybird/background/base.dart';
 import 'package:flutterflappybird/bird/bird.dart';
 import 'package:flutterflappybird/button/low_over_button.dart';
 import 'package:flutterflappybird/collision_detector.dart';
@@ -38,7 +36,7 @@ class GameController extends BaseGame {
   double centerY;
   int mod;
 
-  Background _bg = Background();
+  //Background _bg = Background();
   //Base _base = Base();
   //Obstáculos
   final int _pipeIntervalInMs = 1800;
@@ -63,10 +61,10 @@ class GameController extends BaseGame {
 
   static final images = [
     ParallaxImage("cloud01.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
-    ParallaxImage("mountain.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
+    ParallaxImage("hills.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
     ParallaxImage("ground.png", repeat: ImageRepeat.repeatX, alignment: Alignment.bottomCenter, fill: LayerFill.height)  ];
 
-  final parallaxComponent = ParallaxComponent(images,
+  ParallaxComponent parallaxComponent = ParallaxComponent(images,
       baseSpeed: const Offset(20, 0), layerDelta: const Offset(30, 0));
 
   @override
@@ -90,9 +88,6 @@ class GameController extends BaseGame {
     add(_score);
     add(_startGame);
     add(_gameOver);
-
-
-
     _getLastTopScore().then((s) => _topScore = s);
 
     /*if (Flame.bgm.isPlaying) {
@@ -130,6 +125,17 @@ class GameController extends BaseGame {
     _initializePlayButton();
     _score.reset();
     _hasCrashed = false;
+    _updateParallax();
+  }
+
+  void _updateParallax(){
+    if (!_hasCrashed && _isCrashing()) {
+      this.parallaxComponent.baseSpeed = Offset(0, 0);
+      this.parallaxComponent.layerDelta = Offset(0, 0);
+    }else{
+      this.parallaxComponent.baseSpeed = Offset(20, 0);
+      this.parallaxComponent.layerDelta = Offset(30, 0);
+    }
   }
 
   void _initializePlayButton() {
@@ -180,6 +186,7 @@ class GameController extends BaseGame {
   void update(double t) {
     super.update(t);
     if (GameState.playing == gameState) {
+      _updateParallax();
       if (!_hasCrashed && _isCrashing()) {
         _gotoGameOver();
       } else {
@@ -247,7 +254,7 @@ class GameController extends BaseGame {
       case GameState.playing:
         {
           _bird.lowOver = false;
-          _bg.lowOver(_bird.lowOver);
+          //_bg.lowOver(_bird.lowOver);
           _bird.jump();
         }
         break;
@@ -297,7 +304,7 @@ class GameController extends BaseGame {
     //Flame.bgm.stop();
     _updateTopScore();
     _hasCrashed = true;
-    _bg.lowOver(_bird.lowOver);
+    //_bg.lowOver(_bird.lowOver);
     _gameOver.show();
     _initializeRetryButton();
     gameState = GameState.finished;
@@ -327,7 +334,7 @@ class GameController extends BaseGame {
     _lowOverButton.setVisible(false);
 
     _bird.low();
-    _bg.lowOver(_bird.lowOver);
+    //_bg.lowOver(_bird.lowOver);
   }
 
 }
