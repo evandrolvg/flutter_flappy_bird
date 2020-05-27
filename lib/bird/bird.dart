@@ -128,7 +128,7 @@ class Bird extends AnimationComponent {
 
   void low() {
     if (!isDead) {
-      Flame.audio.play(Sound.attack, volume: 0.4);
+      Flame.audio.play(Sound.attack, volume: 0.9);
       //Flame.bgm.play(Sound.bgm, volume: 0.4);
       lowOver = true;
     }
