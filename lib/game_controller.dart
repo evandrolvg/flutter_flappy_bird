@@ -28,6 +28,7 @@ class GameController extends BaseGame {
   GameState gameState = GameState.initializing;
   //Hive
   Box userBox;
+
   Size screenSize;
 
   double width;
