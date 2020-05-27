@@ -4,29 +4,25 @@ import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutterflappybird/bird/bird.dart';
 
 import '../game_controller.dart';
 
 class LowOverButton extends SpriteComponent with Tapable {
-  bool isVisible = false;
+  bool isDestroy = false;
   final GameController _game;
-  Bird _bird;
 
   LowOverButton(this._game)
-      : super.fromSprite(75, 75, Sprite("rasante-btn.png"));
+      : super.fromSprite(270, 150, Sprite("rasante-btn.png"));
 
   @override
   void render(Canvas c) {
-    if (isVisible) {
-      super.render(c);
-    }
+    super.render(c);
   }
 
   @override
   void resize(Size s) {
-    x = s.width / 5.2 - width;
-    y = s.height * 5 / 5.5;
+    x = s.width / 2 - width / 2;
+    y = s.height * 5 / 6.5;
   }
 
   @override
@@ -34,9 +30,10 @@ class LowOverButton extends SpriteComponent with Tapable {
     this._game.lowOver();
   }
 
-  void setVisible(bool isVisible) {
-    this.isVisible = isVisible;
-  }
+  @override
+  bool destroy() => isDestroy;
+
+  void remove() => isDestroy = true;
 
   @override
   int priority() => 30;

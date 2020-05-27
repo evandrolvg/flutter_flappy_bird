@@ -114,6 +114,7 @@ class GameController extends BaseGame {
     _score.reset();
     _hasCrashed = false;
     _initializeBackground();
+    _destroyLowOverButton();
   }
 
   void _initializeBackground() {
@@ -194,12 +195,12 @@ class GameController extends BaseGame {
     _score.updateScore(_passedPipeIds.length);
     //print('PIPES ${_passedPipeIds.length}');
 
-    mod = _passedPipeIds.length % 1;
-
-    if (mod == 0 && _passedPipeIds.length > 1 && !_bird.lowOver) {
-      _lowOverButton.setVisible(true);
+    if (_passedPipeIds.length > 1 && !_bird.lowOver) {
+      mod = _passedPipeIds.length % 4;
+      if (mod == 0){
+        add(_lowOverButton);
+      }
     }
-
   }
 
   bool _isCrashing() {
@@ -272,6 +273,10 @@ class GameController extends BaseGame {
     _retryButton?.remove();
   }
 
+  void _destroyLowOverButton() {
+    _lowOverButton?.remove();
+  }
+
   void _gotoPlayGame() {
     gameState = GameState.playing;
     _startGame.setVisible(false);
@@ -281,7 +286,7 @@ class GameController extends BaseGame {
   }
 
   void _gotoGameOver() {
-    _lowOverButton.setVisible(false);
+    _destroyLowOverButton();
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
     _bird.die();
@@ -313,9 +318,7 @@ class GameController extends BaseGame {
   }
 
   void lowOver(){
-    _lowOverButton.setVisible(false);
+    _destroyLowOverButton();
     _bird.low();
-    //_bg.lowOver(_bird.lowOver);
   }
-
 }
