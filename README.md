@@ -1,16 +1,5 @@
-# flutterflappybird
+# Flappy Bird Quero-quero
 
-A new Flutter application.
+A Flutter with Flame game.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![print](https://user-images.githubusercontent.com/50203324/83054255-8349a880-a028-11ea-96eb-4ef4b680c7e6.png)
