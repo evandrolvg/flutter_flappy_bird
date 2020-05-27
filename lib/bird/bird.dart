@@ -61,8 +61,7 @@ class Bird extends AnimationComponent {
 
   void _move() {
     if (isDead) {
-      _timeCount =
-          _timeCount < _initialDropSpeed ? _initialDropSpeed : _timeCount;
+      _timeCount = _timeCount < _initialDropSpeed ? _initialDropSpeed : _timeCount;
     }
 
     _calculateDisplacement();
@@ -84,14 +83,12 @@ class Bird extends AnimationComponent {
   }
 
   void _calculateDisplacement() {
-    if(lowOver){ //sobe
+    if(lowOver){ //up
       double _gravityAccelerationLow = 0.25;
       _displacement = (_velocity * _timeCount) + (0.5 * _gravityAccelerationLow * pow(_timeCount, 2));
     }else{
       _displacement = (_velocity * _timeCount) + (0.5 * _gravityAcceleration * pow(_timeCount, 2));
     }
-
-
 
     /*print('_displacement $_displacement');
     print('_velocity $_velocity');

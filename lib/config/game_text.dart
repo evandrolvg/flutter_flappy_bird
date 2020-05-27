@@ -7,5 +7,5 @@ class GameText {
   static const TextConfig regular =
       TextConfig(fontSize: 32.0, fontFamily: 'Minecraft', color: Colors.white);
   static const TextConfig large =
-      TextConfig(fontSize: 48.0, fontFamily: 'Minecraft', color: Colors.white);
+      TextConfig(fontSize: 52.0, fontFamily: 'Minecraft', color: Colors.white);
 }

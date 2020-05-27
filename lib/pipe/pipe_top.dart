@@ -26,6 +26,7 @@ class PipeTop extends SpriteComponent {
       this.sprite = Sprite('pipe-top-explode.png');
       this.angle = this.angle - 0.1;
       this.width = this.width * 1.2 ;
+      this.remove();
     }
 
     this.x = x;

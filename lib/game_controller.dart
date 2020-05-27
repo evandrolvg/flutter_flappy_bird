@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flame/components/parallax_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
@@ -16,6 +15,7 @@ import 'package:flutterflappybird/text/top_score.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
+import 'background/background.dart';
 import 'button/play_button.dart';
 import 'button/retry_button.dart';
 import 'config/store.dart';
@@ -36,8 +36,6 @@ class GameController extends BaseGame {
   double centerY;
   int mod;
 
-  //Background _bg = Background();
-  //Base _base = Base();
   //Obstáculos
   final int _pipeIntervalInMs = 1800;
   int _pipeCount;
@@ -52,20 +50,13 @@ class GameController extends BaseGame {
   FinalScore finalScoreText;
   TopScore topScoreText;
 
+  Background _background = Background();
   StartGame _startGame = StartGame();
   PlayButton _playButton;
   LowOverButton _lowOverButton;
   GameOver _gameOver = GameOver();
   RetryButton _retryButton;
   bool _hasCrashed;
-
-  static final images = [
-    ParallaxImage("cloud01.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
-    ParallaxImage("hills.png", repeat: ImageRepeat.repeatX, alignment: Alignment.center, fill: LayerFill.height),
-    ParallaxImage("ground.png", repeat: ImageRepeat.repeatX, alignment: Alignment.bottomCenter, fill: LayerFill.height)  ];
-
-  ParallaxComponent parallaxComponent = ParallaxComponent(images,
-      baseSpeed: const Offset(20, 0), layerDelta: const Offset(30, 0));
 
   @override
   bool debugMode() {
@@ -82,9 +73,7 @@ class GameController extends BaseGame {
       Sound.score,
     ]);
     Flame.audio.disableLog();
-    //add(_bg);
-    add(parallaxComponent);
-    //add(_base);
+    add(_background);
     add(_score);
     add(_startGame);
     add(_gameOver);
@@ -118,35 +107,38 @@ class GameController extends BaseGame {
   }
 
   void _initializeGame() {
-    //print('GameController - initializeGame');
-    //_initializeBgm();
     _initializeBird();
     _initializePipes();
     _initializePlayButton();
     _score.reset();
     _hasCrashed = false;
-    _updateParallax();
+    _initializeBackground();
+  }
+
+  void _initializeBackground() {
+    add(_background);
   }
 
   void _updateParallax(){
     if (!_hasCrashed && _isCrashing()) {
-      this.parallaxComponent.baseSpeed = Offset(0, 0);
-      this.parallaxComponent.layerDelta = Offset(0, 0);
+      this._background.baseSpeed = Offset(0, 0);
+      this._background.layerDelta = Offset(0, 0);
+    }else if (_bird.lowOver) {
+      this._background.baseSpeed = Offset(5, 0);
+      this._background.layerDelta = Offset(100, 0);
     }else{
-      this.parallaxComponent.baseSpeed = Offset(20, 0);
-      this.parallaxComponent.layerDelta = Offset(30, 0);
+      this._background.baseSpeed = Offset(5, 0);
+      this._background.layerDelta = Offset(10, 0);
     }
   }
 
   void _initializePlayButton() {
-    //print('GameController - initializePlayButton');
     _playButton?.remove();
     _playButton = PlayButton(() => _gotoPlayGame());
     add(_playButton);
   }
 
   void _initializeRetryButton() {
-    //print('GameController - initializeRetryButton');
     _destroyRetryButton();
     _retryButton = RetryButton(() => _gotoStartGame());
     add(_retryButton);
@@ -158,14 +150,12 @@ class GameController extends BaseGame {
   }
 
   void _initializeBird() {
-    //print('GameController - initializeBird');
     _bird?.remove();
     _bird = Bird(this);
     add(_bird);
   }
 
   void _initializePipes() {
-    //print('GameController - initializePipes');
     _pipes.forEach((p) => p.destroy());
     _pipes = [];
     _pipeCount = 0;
@@ -197,7 +187,6 @@ class GameController extends BaseGame {
   }
 
   void _updateScore() {
-    //print('GameController - updateScore');
     _pipes
         .where((p) => p.isPassed(_bird))
         .forEach((p) => _passedPipeIds.add(p.pipeId));
@@ -213,7 +202,6 @@ class GameController extends BaseGame {
   }
 
   bool _isCrashing() {
-    //print('GameController - isCrashing');
     if (_bird.isDead || _hasCrashed) return false;
     if (_bird.y < 0 || _bird.y > (height - _bird.height / 2)) {
       return true;
@@ -232,7 +220,6 @@ class GameController extends BaseGame {
   }
 
   void _updatePipes(double t) {
-    //print('GameController - updatePipes');
     if (_lastPipeInterval > _pipeIntervalInMs) {
       Pipe pipe = Pipe(_pipeCount++, this, width);
       add(pipe.pipeTop);
@@ -254,7 +241,6 @@ class GameController extends BaseGame {
       case GameState.playing:
         {
           _bird.lowOver = false;
-          //_bg.lowOver(_bird.lowOver);
           _bird.jump();
         }
         break;
@@ -264,7 +250,6 @@ class GameController extends BaseGame {
   }
 
   void _gotoStartGame() {
-    //print('gotoStartGame');
     _startGame.setVisible(true);
     _gameOver.hide();
     _hideScores();
@@ -273,6 +258,7 @@ class GameController extends BaseGame {
     _initializePlayButton();
     _initializeGame();
     gameState = GameState.start;
+    _updateParallax();
   }
 
   void _hideScores() {
@@ -286,17 +272,14 @@ class GameController extends BaseGame {
   }
 
   void _gotoPlayGame() {
-    //print('GameController - gotoPlayGame');
     gameState = GameState.playing;
     _startGame.setVisible(false);
     _playButton.remove();
-    //_lowOverButton.setVisible(true);
     _score.setVisible(true);
     _bird.jump();
   }
 
   void _gotoGameOver() {
-    //print('GameController - gotoGameOver');
     _lowOverButton.setVisible(false);
     _score.setVisible(false);
     Flame.audio.play(Sound.crash, volume: 0.5);
@@ -311,7 +294,6 @@ class GameController extends BaseGame {
   }
 
   void _updateTopScore() {
-    //print('GameController - updateTopScore');
     _getLastTopScore().then((lastTopScore) {
       if (_score.score > lastTopScore) {
         _topScore = _score.score;
@@ -323,7 +305,6 @@ class GameController extends BaseGame {
   }
 
   void _showScoreBoard() {
-    //print('GameController - showScoreBoard');
     finalScoreText = FinalScore(_score.score);
     topScoreText = TopScore(_topScore);
     add(finalScoreText);
@@ -332,7 +313,6 @@ class GameController extends BaseGame {
 
   void lowOver(){
     _lowOverButton.setVisible(false);
-
     _bird.low();
     //_bg.lowOver(_bird.lowOver);
   }
